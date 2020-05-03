@@ -109,7 +109,7 @@ func main() {
 		scores := midas.Midas(&src, &dst, &times, *rows, *buckets)
 		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC, "s")
 
-		fmt.Println("Writing Anomaly Scores to", outputFile)
+		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
 		if err != nil {
 			log.Fatal(err)
@@ -125,7 +125,7 @@ func main() {
 		scores := midas.MidasR(&src, &dst, &times, *rows, *buckets, *alpha)
 		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC, "s")
 
-		fmt.Println("Writing Anomaly Scores to", outputFile)
+		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
 		if err != nil {
 			log.Fatal(err)
