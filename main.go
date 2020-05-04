@@ -15,7 +15,7 @@ import (
 
 const CLOCKS_PER_SEC = 1000000
 
-func load_data(src, dst, times *[]int, inputFile string, undirected bool) {
+func loadData(src, dst, times *[]int, inputFile string, undirected bool) {
 	infile, err := os.Open(inputFile)
 	if err != nil {
 		log.Fatal(err)
@@ -98,16 +98,16 @@ func main() {
 	var src, dst, times []int
 
 	if *undirected == true {
-		load_data(&src, &dst, &times, *inputFile, true)
+		loadData(&src, &dst, &times, *inputFile, true)
 	} else {
-		load_data(&src, &dst, &times, *inputFile, false)
+		loadData(&src, &dst, &times, *inputFile, false)
 	}
 	fmt.Println("Finished Loading Data from", *inputFile)
 
 	if *norelations == true {
 		startTime := time.Now()
-		scores := midas.Midas(&src, &dst, &times, *rows, *buckets)
-		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC, "s")
+		scores := midas.Midas(src, dst, times, *rows, *buckets)
+		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC)
 
 		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
@@ -116,14 +116,14 @@ func main() {
 		}
 		defer file.Close()
 		writer := bufio.NewWriter(file)
-		for _, score := range *scores {
+		for _, score := range scores {
 			writer.WriteString(fmt.Sprintf("%f\n", score))
 		}
 		writer.Flush()
 	} else {
 		startTime := time.Now()
-		scores := midas.MidasR(&src, &dst, &times, *rows, *buckets, *alpha)
-		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC, "s")
+		scores := midas.MidasR(src, dst, times, *rows, *buckets, *alpha)
+		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC)
 
 		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
@@ -132,7 +132,7 @@ func main() {
 		}
 		defer file.Close()
 		writer := bufio.NewWriter(file)
-		for _, score := range *scores {
+		for _, score := range scores {
 			writer.WriteString(fmt.Sprintf("%f\n", score))
 		}
 		writer.Flush()

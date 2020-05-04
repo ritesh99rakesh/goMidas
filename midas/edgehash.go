@@ -12,7 +12,7 @@ type Edgehash struct {
 	count                  [][]float64
 }
 
-func (e Edgehash) Edgehash(r, b, m0 int) {
+func (e *Edgehash) Edgehash(r, b, m0 int) {
 	e.numRows, e.numBuckets, e.m = r, b, m0
 	e.hashA, e.hashB = make([]int, r), make([]int, r)
 	randomGenerator := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -32,7 +32,7 @@ func (e Edgehash) hash(a, b, i int) int {
 	}
 }
 
-func (e Edgehash) insert(a, b int, weight float64) {
+func (e *Edgehash) insert(a, b int, weight float64) {
 	var bucket int
 	for i := 0; i < e.numRows; i++ {
 		bucket = e.hash(a, b, i)
@@ -50,14 +50,14 @@ func (e Edgehash) getCount(a, b int) float64 {
 	return minCount
 }
 
-func (e Edgehash) clear() {
+func (e *Edgehash) clear() {
 	e.count = make([][]float64, e.numRows)
 	for i := range e.count {
 		e.count[i] = make([]float64, e.numBuckets)
 	}
 }
 
-func (e Edgehash) lower(factor float64) {
+func (e *Edgehash) lower(factor float64) {
 	for i := 0; i < e.numRows; i++ {
 		for j := 0; j < e.numBuckets; j++ {
 			e.count[i][j] = e.count[i][j] * factor

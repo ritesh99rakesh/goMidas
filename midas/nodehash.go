@@ -12,7 +12,7 @@ type Nodehash struct {
 	count                  [][]float64
 }
 
-func (n Nodehash) Nodehash(r, b int) {
+func (n *Nodehash) Nodehash(r, b int) {
 	n.numRows, n.numBuckets = r, b
 	n.hashA, n.hashB = make([]int, r), make([]int, r)
 	randomGenerator := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -32,7 +32,7 @@ func (n Nodehash) hash(a, i int) int {
 	}
 }
 
-func (n Nodehash) insert(a int, weight float64) {
+func (n *Nodehash) insert(a int, weight float64) {
 	var bucket int
 	for i := 0; i < n.numRows; i++ {
 		bucket = n.hash(a, i)
@@ -50,14 +50,14 @@ func (n Nodehash) getCount(a int) float64 {
 	return minCount
 }
 
-func (n Nodehash) clear() {
+func (n *Nodehash) clear() {
 	n.count = make([][]float64, n.numRows)
 	for i := range n.count {
 		n.count[i] = make([]float64, n.numBuckets)
 	}
 }
 
-func (n Nodehash) lower(factor float64) {
+func (n *Nodehash) lower(factor float64) {
 	for i := 0; i < n.numRows; i++ {
 		for j := 0; j < n.numBuckets; j++ {
 			n.count[i][j] = n.count[i][j] * factor
