@@ -5,7 +5,7 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
-	"github.com/goMidas/midas"
+	"github.com/ritesh99rakesh/goMidas"
 	"io"
 	"log"
 	"os"
@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-const CLOCKS_PER_SEC = 1000000
+const clocksPerCycle = 1000000
 
 func loadData(src, dst, times *[]int, inputFile string, undirected bool) {
 	infile, err := os.Open(inputFile)
@@ -107,7 +107,7 @@ func main() {
 	if *norelations == true {
 		startTime := time.Now()
 		scores := midas.Midas(src, dst, times, *rows, *buckets)
-		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC)
+		fmt.Println("Time taken:", (time.Now().Sub(startTime))/clocksPerCycle)
 
 		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
@@ -123,7 +123,7 @@ func main() {
 	} else {
 		startTime := time.Now()
 		scores := midas.MidasR(src, dst, times, *rows, *buckets, *alpha)
-		fmt.Println("Time taken:", (time.Now().Sub(startTime))/CLOCKS_PER_SEC)
+		fmt.Println("Time taken:", (time.Now().Sub(startTime))/clocksPerCycle)
 
 		fmt.Println("Writing Anomaly Scores to", *outputFile)
 		file, err := os.Create(*outputFile)
